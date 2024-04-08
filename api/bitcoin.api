@@ -1,0 +1,59 @@
+syntax = "v1"
+
+info (
+	title:   "比特币服务"
+	desc:    "比特币服务"
+	author:  "Hsurich"
+	email:   "hsurich@qq.com"
+	version: "v1"
+)
+
+type (
+	NewAccountResp {
+		Address    string `json:"address"`
+		PrivateKey string `json:"privateKey"`
+	}
+)
+
+type (
+	CheckArrivedReq {
+		Address string `json:"address"`
+		Amount  int64  `json:"amount"`
+	}
+	CheckArrivedResp {
+		Arrived bool   `json:"arrived"`
+		Address string `json:"address"`
+		Balance int64  `json:"balance"`
+	}
+)
+
+type (
+	RechargePlatformReq {
+		From   string `json:"from"`
+		To     int64  `json:"to"`
+		FromPk string `json:"fromPk"`
+	}
+	RechargePlatformResp {
+		Msg  string `json:"msg"`
+		Code int64  `json:"code"`
+	}
+)
+
+@server (
+	prefix: bitcoin/v1
+	group:  bitcoin
+)
+service nft {
+	@doc "newAccount"
+	@handler newAccount
+	get /account/new returns (NewAccountResp)
+
+	@doc "checkArrived"
+	@handler checkArrived
+	post /recharge/check (CheckArrivedReq) returns (CheckArrivedResp)
+
+	@doc "rechargePlatform"
+	@handler rechargePlatform
+	post /recharge/platform (RechargePlatformReq) returns (RechargePlatformResp)
+}
+
