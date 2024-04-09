@@ -19,7 +19,7 @@ type NewAccountResp struct {
 
 type RechargePlatformReq struct {
 	From   string `json:"from"`
-	To     int64  `json:"to"`
+	To     string `json:"to"`
 	FromPk string `json:"fromPk"`
 }
 

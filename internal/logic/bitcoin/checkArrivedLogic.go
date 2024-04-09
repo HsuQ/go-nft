@@ -20,9 +20,13 @@ type CheckArrivedLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
+// type Address struct {
+// 	Address string `json:"address"`
+// 	Balance int64  `json:"balance"`
+// }
+
 type Address struct {
-	Address string `json:"address"`
-	Balance int64  `json:"balance"`
+	Balance int64 `json:"final_balance"`
 }
 
 func NewCheckArrivedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CheckArrivedLogic {
@@ -34,9 +38,9 @@ func NewCheckArrivedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Chec
 }
 
 func (l *CheckArrivedLogic) CheckArrived(req *types.CheckArrivedReq) (resp *types.CheckArrivedResp, err error) {
-	// todo: add your logic here and delete this line
 	address := req.Address
-	url := fmt.Sprintf("https://api.blockcypher.com/v1/btc/main/addrs/%s/balance", address)
+	// url := fmt.Sprintf("https://api.blockcypher.com/v1/btc/main/addrs/%s/balance", address)
+	url := fmt.Sprintf("https://blockchain.info/rawaddr/%s", address)
 
 	res, err := http.Get(url)
 	if err != nil {
@@ -52,6 +56,10 @@ func (l *CheckArrivedLogic) CheckArrived(req *types.CheckArrivedReq) (resp *type
 	}
 
 	var addr Address
+
+	// 打印body
+	// fmt.Println(string(body))
+
 	err = json.Unmarshal(body, &addr)
 	if err != nil {
 		fmt.Println(err)
