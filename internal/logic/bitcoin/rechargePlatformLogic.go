@@ -9,7 +9,6 @@ import (
 	"log"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/btcsuite/btcutil"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,29 +28,15 @@ func NewRechargePlatformLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *RechargePlatformLogic) RechargePlatform(req *types.RechargePlatformReq) (resp *types.RechargePlatformResp, err error) {
-	// 创建RPC客户端连接
-	connCfg := &rpcclient.ConnConfig{
-		Host:         "localhost:8332",
-		User:         "yourusername",
-		Pass:         "yourpassword",
-		HTTPPostMode: true,
-		DisableTLS:   true,
-	}
-
-	client, err := rpcclient.New(connCfg, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Shutdown()
-
-	// 创建比特币地址
-	address, err := btcutil.DecodeAddress("yourBitcoinAddress", &chaincfg.MainNetParams)
+	client := l.svcCtx.BitcoinClient
+	// 将to地址转换为btcutil.Address类型
+	toAddress, err := btcutil.DecodeAddress(req.To, &chaincfg.MainNetParams)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// 获取地址的未消费输出
-	unspent, err := client.ListUnspentMinMaxAddresses(1, 9999999, []btcutil.Address{address})
+	unspent, err := client.ListUnspentMinMaxAddresses(1, 9999999, []btcutil.Address{toAddress})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -74,16 +59,17 @@ func (l *RechargePlatformLogic) RechargePlatform(req *types.RechargePlatformReq)
 
 	// 计算可以转出的金额
 	amount := total - fee
+	log.Default().Println("Total balance:", amount)
 
 	// 发送转账请求
-	_, err = client.SendToAddress(address, amount)
-	if err != nil {
-		log.Fatal(err)
-		return &types.RechargePlatformResp{
-			Code: 500,
-			Msg:  "Transaction failed",
-		}, err
-	}
+	// _, err = client.SendToAddress(address, amount)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// 	return &types.RechargePlatformResp{
+	// 		Code: 500,
+	// 		Msg:  "Transaction failed",
+	// 	}, err
+	// }
 
 	log.Println("Transaction successful")
 	return &types.RechargePlatformResp{

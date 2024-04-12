@@ -40,7 +40,10 @@ func (l *NewAccountLogic) NewAccount() (resp *types.NewAccountResp, err error) {
 	pubKey := privKey.PubKey()
 
 	// 获取关联的比特币地址
+
+	// 主网
 	address, err := btcutil.NewAddressPubKey(pubKey.SerializeCompressed(), &chaincfg.MainNetParams)
+
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,7 +56,15 @@ func (l *NewAccountLogic) NewAccount() (resp *types.NewAccountResp, err error) {
 		return
 	}
 
-	fmt.Println("Generated Address: " + address.EncodeAddress())
+	// 测试网
+	testAddress, err := btcutil.NewAddressPubKey(pubKey.SerializeCompressed(), &chaincfg.TestNet3Params)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Generated Testnet Address: " + testAddress.EncodeAddress())
+
+	fmt.Println("Generated Mainnet Address: " + address.EncodeAddress())
 	fmt.Println("Private Key WIF: " + wif.String())
 
 	return &types.NewAccountResp{
