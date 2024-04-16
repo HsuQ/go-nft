@@ -77,3 +77,21 @@ func (l *RechargePlatformLogic) RechargePlatform(req *types.RechargePlatformReq)
 		Msg:  "Transaction successful",
 	}, nil
 }
+
+// func (l *RechargePlatformLogic) RechargePlatformClient(req *types.RechargePlatformReq) (resp *types.RechargePlatformResp, err error) {
+// 	client := l.svcCtx.BitcoinClient
+// 	amount := 0.01      // 转账金额，单位为 BTC
+// 	from := req.From    // 转账账户
+// 	toAddress := req.To // 目标地址
+// 	toAddressPubKeyHash, err := btcutil.DecodeAddress(toAddress, &chaincfg.MainNetParams)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	txHash, err := client.SendFrom(from, toAddressPubKeyHash, btcutil.Amount(amount*1e8)) // 注意：btcutil.Amount的单位是Satoshi，1 BTC = 1e8 Satoshi
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	log.Printf("Transaction ID: %s\n", txHash)
+// }

@@ -3,6 +3,12 @@ Host: 0.0.0.0
 Port: 8888
 
 BitcoinConf:
-  Host: 192.168.3.18:8332
+  Host: 192.168.3.4:18332
   User: test
   Pass: test
+  WalletName: mywallet-hd-1
+  WalletPass: mypass
+  Mainnet: false
+
+Log:
+  Level: info
