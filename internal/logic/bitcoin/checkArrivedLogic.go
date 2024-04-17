@@ -11,6 +11,8 @@ import (
 	"nft/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
+
+	"github.com/blockcypher/gobcy"
 )
 
 type CheckArrivedLogic struct {
@@ -84,36 +86,26 @@ type AddressBalance struct {
 }
 
 func (l *CheckArrivedLogic) CheckArrivedTestnet3(req *types.CheckArrivedReq) (myResp *types.CheckArrivedResp, err error) {
-	address := req.Address
-	url := fmt.Sprintf("https://api.blockcypher.com/v1/btc/test3/addrs/%s/balance", address)
-
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
+	btc := gobcy.API{
+		Token: l.svcCtx.Config.BlockcypherConf.Token,
+		Coin:  l.svcCtx.Config.BlockcypherConf.Coin,
+		Chain: l.svcCtx.Config.BlockcypherConf.Network,
 	}
 
-	var balance AddressBalance
-	err = json.Unmarshal(body, &balance)
+	addressInfo, err := btc.GetAddrBal(req.Address, nil)
 	if err != nil {
-		fmt.Println(err)
-		return
+		logx.Error("btc.GetAddrBal error:", err)
+		return nil, err
 	}
+	logx.Infof("%+v\n", addressInfo)
 
-	fmt.Printf("Balance: %d satoshis\n", balance.Balance)
+	balance := addressInfo.Balance
 
-	arrived := balance.Balance >= req.Amount
+	arrived := balance.Int64() >= req.Amount
 
 	return &types.CheckArrivedResp{
 		Address: req.Address,
 		Arrived: arrived,
-		Balance: balance.Balance,
+		Balance: balance.Int64(),
 	}, nil
 }

@@ -3,10 +3,11 @@ package bitcoin
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"nft/internal/logic/bitcoin"
 	"nft/internal/svc"
 	"nft/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func RechargePlatformHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

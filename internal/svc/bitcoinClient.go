@@ -6,6 +6,7 @@ import (
 	"nft/internal/config"
 
 	"github.com/btcsuite/btcd/rpcclient"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
@@ -19,7 +20,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	}
 	btcClient, err := rpcclient.New(connCfg, nil)
 	if err != nil {
-		fmt.Println("rpcclient.New error " + err.Error())
+		logx.Errorf("rpcclient.New error " + err.Error())
 		return nil, err
 	}
 	// 钱包名称
@@ -28,7 +29,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	// 获取所有钱包
 	rawResponse, err := btcClient.RawRequest("listwalletdir", []json.RawMessage{})
 	if err != nil {
-		fmt.Println("ListWalletDir error " + err.Error())
+		logx.Infof("ListWalletDir error " + err.Error())
 		return nil, err
 	}
 
@@ -46,7 +47,6 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	// 检查钱包是否存在
 	walletExists := false
 	for _, wallet := range walletDir.Wallets {
-		fmt.Println(wallet.Name)
 		if wallet.Name == walletName {
 			walletExists = true
 			break
@@ -59,7 +59,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 		params := []json.RawMessage{
 			json.RawMessage(`"` + walletName + `"`),
 			json.RawMessage("false"),
-			json.RawMessage("true"),
+			json.RawMessage("false"), // (boolean, optional, default=false) Create a blank wallet. A blank wallet has no keys or HD seed. One can be set using sethdseed.
 			json.RawMessage(`"` + password + `"`),
 		}
 
@@ -68,7 +68,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 			fmt.Println("CreateWallet error " + err.Error())
 			return nil, err
 		}
-		fmt.Printf("Wallet %s created successfully.", walletName)
+		logx.Infof("Wallet %s created successfully.", walletName)
 	}
 
 	// 获取已加载的钱包列表
@@ -90,7 +90,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	for _, loadedWallet := range loadedWallets {
 		if loadedWallet == walletName {
 			isLoaded = true
-			fmt.Println("钱包已加载 ")
+			logx.Info("钱包已加载")
 			break
 		}
 	}
@@ -104,7 +104,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 		}
 		fmt.Println("Wallet loaded successfully.")
 	}
-	fmt.Println("BTC client connected successfully.")
+	logx.Info("BTC client connected successfully.")
 	connCfg.Host = c.BitcoinConf.Host + "/wallet/" + walletName
 
 	btcClient, err = rpcclient.New(connCfg, nil)
@@ -113,12 +113,6 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 		fmt.Println("rpcclient.New error " + err.Error())
 		return nil, err
 	}
-
-	// Refill the keypool
-	// _, err = btcClient.RawRequest("keypoolrefill", nil)
-	// if err != nil {
-	// 	return nil, err
-	// }
 
 	return btcClient, nil
 }

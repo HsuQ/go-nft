@@ -6,9 +6,14 @@ BitcoinConf:
   Host: 192.168.3.4:18332
   User: test
   Pass: test
-  WalletName: mywallet-hd-1
+  WalletName: mywallet-hd-2
   WalletPass: mypass
   Mainnet: false
 
 Log:
   Level: info
+
+Blockcypher:
+  Token: youToken
+  Network: testnet3
+  Coin:  btc

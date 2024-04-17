@@ -65,3 +65,16 @@ func (l *NewAccountLogic) NewWalletAccount() (resp *types.NewAccountResp, err er
 	}, nil
 
 }
+
+func (l *NewAccountLogic) NewHDWalletAccount() (resp *types.NewAccountResp, err error) {
+	client := l.svcCtx.BitcoinClient
+	address, err := client.GetNewAddress("")
+	if err != nil {
+		fmt.Println("client.GetNewAddress error " + err.Error())
+		return nil, err
+	}
+	return &types.NewAccountResp{
+		Address:    address.EncodeAddress(),
+		PrivateKey: "123",
+	}, nil
+}

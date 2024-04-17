@@ -3,18 +3,15 @@ package bitcoin
 import (
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"nft/internal/logic/bitcoin"
 	"nft/internal/svc"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func NewAccountHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func GetBalanceHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := bitcoin.NewNewAccountLogic(r.Context(), svcCtx)
-		// resp, err := l.NewWalletAccount()
-		resp, err := l.NewHDWalletAccount()
-
+		l := bitcoin.NewGetBalanceLogic(r.Context(), svcCtx)
+		resp, err := l.GetBalance()
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

@@ -20,6 +20,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/balance",
+				Handler: bitcoin.GetBalanceHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/recharge/check",
 				Handler: bitcoin.CheckArrivedHandler(serverCtx),
 			},
