@@ -17,8 +17,7 @@ type CheckArrivedResp struct {
 }
 
 type NewAccountResp struct {
-	Address    string `json:"address"`
-	PrivateKey string `json:"privateKey"`
+	Address string `json:"address"`
 }
 
 type RechargePlatformReq struct {

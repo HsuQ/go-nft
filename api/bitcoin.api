@@ -10,8 +10,7 @@ info (
 
 type (
 	NewAccountResp {
-		Address    string `json:"address"`
-		PrivateKey string `json:"privateKey"`
+		Address string `json:"address"`
 	}
 )
 

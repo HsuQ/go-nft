@@ -12,7 +12,6 @@ import (
 func NewAccountHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := bitcoin.NewNewAccountLogic(r.Context(), svcCtx)
-		// resp, err := l.NewWalletAccount()
 		resp, err := l.NewHDWalletAccount()
 
 		if err != nil {

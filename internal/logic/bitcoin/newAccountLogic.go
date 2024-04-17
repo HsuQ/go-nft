@@ -60,8 +60,7 @@ func (l *NewAccountLogic) NewWalletAccount() (resp *types.NewAccountResp, err er
 	fmt.Println("Address: ", address)
 
 	return &types.NewAccountResp{
-		Address:    address.EncodeAddress(),
-		PrivateKey: masterKey.String(),
+		Address: address.EncodeAddress(),
 	}, nil
 
 }
@@ -74,7 +73,6 @@ func (l *NewAccountLogic) NewHDWalletAccount() (resp *types.NewAccountResp, err 
 		return nil, err
 	}
 	return &types.NewAccountResp{
-		Address:    address.EncodeAddress(),
-		PrivateKey: "123",
+		Address: address.EncodeAddress(),
 	}, nil
 }

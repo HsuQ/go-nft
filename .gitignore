@@ -16,3 +16,7 @@ data/*
 #vscode
 .vscode
 .vscode/
+nft
+etc/nft.yaml
+
+logs/*
