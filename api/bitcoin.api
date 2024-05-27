@@ -1,5 +1,7 @@
 syntax = "v1"
 
+import "eth.api"
+
 info (
 	title:   "比特币服务"
 	desc:    "比特币服务"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"nft/internal/svc"
@@ -48,14 +48,14 @@ func (l *CheckArrivedLogic) CheckArrivedMainNet(req *types.CheckArrivedReq) (res
 
 	res, err := http.Get(url)
 	if err != nil {
-		fmt.Println(err)
+		logx.Error("http.Get error:", err)
 		return
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
+		logx.Error("io.ReadAll error:", err)
 		return
 	}
 
@@ -63,14 +63,16 @@ func (l *CheckArrivedLogic) CheckArrivedMainNet(req *types.CheckArrivedReq) (res
 
 	// 打印body
 	// fmt.Println(string(body))
+	logx.Infof("body: %s\n", string(body))
 
 	err = json.Unmarshal(body, &addr)
 	if err != nil {
-		fmt.Println(err)
+		logx.Error("json.Unmarshal error:", err)
 		return
 	}
 
-	fmt.Printf("Balance of address %s: %d\n", req.Address, addr.Balance)
+	// fmt.Printf("Balance of address %s: %d\n", req.Address, addr.Balance)
+	logx.Infof("Balance of address %s: %d\n", req.Address, addr.Balance)
 
 	arrived := addr.Balance >= req.Amount
 

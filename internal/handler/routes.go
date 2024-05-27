@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	bitcoin "nft/internal/handler/bitcoin"
+	eth "nft/internal/handler/eth"
 	"nft/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -35,5 +36,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/bitcoin/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/recharge/check",
+				Handler: eth.CheckEthArrivedHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/eth/v1"),
 	)
 }

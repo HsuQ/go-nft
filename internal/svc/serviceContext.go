@@ -4,11 +4,13 @@ import (
 	"nft/internal/config"
 
 	"github.com/btcsuite/btcd/rpcclient"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type ServiceContext struct {
 	Config        config.Config
 	BitcoinClient *rpcclient.Client
+	EthClient     *ethclient.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -17,8 +19,14 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		// handle error
 		panic(err)
 	}
+	ethClient, err := NewEthClient()
+	if err != nil {
+		// handle error
+		panic(err)
+	}
 	return &ServiceContext{
 		Config:        c,
 		BitcoinClient: btcClient,
+		EthClient:     ethClient,
 	}
 }
