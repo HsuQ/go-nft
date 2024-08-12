@@ -19,7 +19,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		// handle error
 		panic(err)
 	}
-	ethClient, err := NewEthClient()
+	ethClient, err := NewEthClient(c)
 	if err != nil {
 		// handle error
 		panic(err)

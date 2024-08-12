@@ -16,6 +16,17 @@ type CheckArrivedResp struct {
 	Balance int64  `json:"balance"`
 }
 
+type CheckERC20ArrivedReq struct {
+	Address string `json:"address"`
+	Amount  string `json:"amount"`
+}
+
+type CheckERC20ArrivedResp struct {
+	Arrived bool   `json:"arrived"`
+	Address string `json:"address"`
+	Balance string `json:"balance"`
+}
+
 type CheckEthArrivedReq struct {
 	Address string `json:"address"`
 	Amount  int64  `json:"amount"`

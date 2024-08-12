@@ -42,6 +42,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
+				Path:    "/erc20/check",
+				Handler: eth.CheckERC20ArrivedHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/recharge/check",
 				Handler: eth.CheckEthArrivedHandler(serverCtx),
 			},

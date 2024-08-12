@@ -118,14 +118,14 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	backupFile := fmt.Sprintf("/home/%s.txt", walletName)
 	// backupFile := path.Join(".", walletName+".txt")
 	logx.Infof("Backing up wallet %s to file %s.", walletName, backupFile)
-	dumpParams := []json.RawMessage{
-		json.RawMessage(`"` + backupFile + `"`),
-	}
-	_, err = btcClient.RawRequest("dumpwallet", dumpParams)
-	if err != nil {
-		logx.Errorf("DumpWallet error " + err.Error())
-		return nil, err
-	}
+	// dumpParams := []json.RawMessage{
+	// 	json.RawMessage(`"` + backupFile + `"`),
+	// }
+	// _, err = btcClient.RawRequest("dumpwallet", dumpParams)
+	// if err != nil {
+	// 	logx.Errorf("DumpWallet error " + err.Error())
+	// 	return nil, err
+	// }
 	logx.Infof("Wallet %s has been backed up to file %s.", walletName, backupFile)
 
 	return btcClient, nil
