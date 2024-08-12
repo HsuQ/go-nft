@@ -59,13 +59,13 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 		params := []json.RawMessage{
 			json.RawMessage(`"` + walletName + `"`),
 			json.RawMessage("false"),
-			json.RawMessage("false"), // (boolean, optional, default=false) Create a blank wallet. A blank wallet has no keys or HD seed. One can be set using sethdseed.
+			json.RawMessage("true"), // (boolean, optional, default=false) Create a blank wallet. A blank wallet has no keys or HD seed. One can be set using sethdseed.
 			json.RawMessage(`"` + password + `"`),
 		}
 
 		_, err = btcClient.RawRequest("createwallet", params)
 		if err != nil {
-			fmt.Println("CreateWallet error " + err.Error())
+			logx.Errorf("CreateWallet error " + err.Error())
 			return nil, err
 		}
 		logx.Infof("Wallet %s created successfully.", walletName)
@@ -74,14 +74,14 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 	// 获取已加载的钱包列表
 	rawResponse, err = btcClient.RawRequest("listwallets", []json.RawMessage{})
 	if err != nil {
-		fmt.Println("ListWallets error " + err.Error())
+		logx.Errorf("ListWallets error " + err.Error())
 		return nil, err
 	}
 
 	var loadedWallets []string
 	err = json.Unmarshal(rawResponse, &loadedWallets)
 	if err != nil {
-		fmt.Println("Error unmarshalling listwallets response " + err.Error())
+		logx.Errorf("Error unmarshalling listwallets response " + err.Error())
 		return nil, err
 	}
 
@@ -102,7 +102,7 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 			fmt.Println("LoadWallet error " + err.Error())
 			return nil, err
 		}
-		fmt.Println("Wallet loaded successfully.")
+		logx.Infof("Wallet %s loaded successfully.", walletName)
 	}
 	logx.Info("BTC client connected successfully.")
 	connCfg.Host = c.BitcoinConf.Host + "/wallet/" + walletName
@@ -113,6 +113,20 @@ func NewBitcoinClient(c config.Config) (*rpcclient.Client, error) {
 		fmt.Println("rpcclient.New error " + err.Error())
 		return nil, err
 	}
+
+	// Backup the seed
+	backupFile := fmt.Sprintf("/home/%s.txt", walletName)
+	// backupFile := path.Join(".", walletName+".txt")
+	logx.Infof("Backing up wallet %s to file %s.", walletName, backupFile)
+	dumpParams := []json.RawMessage{
+		json.RawMessage(`"` + backupFile + `"`),
+	}
+	_, err = btcClient.RawRequest("dumpwallet", dumpParams)
+	if err != nil {
+		logx.Errorf("DumpWallet error " + err.Error())
+		return nil, err
+	}
+	logx.Infof("Wallet %s has been backed up to file %s.", walletName, backupFile)
 
 	return btcClient, nil
 }
