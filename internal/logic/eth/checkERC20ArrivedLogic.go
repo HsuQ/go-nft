@@ -37,7 +37,7 @@ func (l *CheckERC20ArrivedLogic) CheckERC20Arrived(req *types.CheckERC20ArrivedR
 		return nil, fmt.Errorf("地址格式不正确")
 	}
 	accountAddress := common.HexToAddress(req.Address)
-	contractAddress := common.HexToAddress("0x176243af858746d5a5ca233bc09e3a8c5fc1dfee")
+	contractAddress := common.HexToAddress(l.svcCtx.Config.ETHConf.ContractAddress)
 
 	// Get the latest block number
 	blockHeader, err := l.svcCtx.EthClient.HeaderByNumber(context.Background(), nil)
