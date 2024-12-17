@@ -47,8 +47,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/nonce",
+				Handler: eth.GetTransactionCountHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/recharge/check",
 				Handler: eth.CheckEthArrivedHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/send",
+				Handler: eth.SendRawTransactionHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/eth/v1"),

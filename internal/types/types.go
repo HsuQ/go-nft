@@ -38,6 +38,15 @@ type CheckEthArrivedResp struct {
 	Balance int64  `json:"balance"`
 }
 
+type GetTransactionCountReq struct {
+	Address string `json:"address"`
+}
+
+type GetTransactionCountResp struct {
+	Nonce   string `json:"nonce"`
+	Address string `json:"address"`
+}
+
 type NewAccountResp struct {
 	Address string `json:"address"`
 }
@@ -49,4 +58,12 @@ type RechargePlatformReq struct {
 type RechargePlatformResp struct {
 	Msg  string `json:"msg"`
 	Code int64  `json:"code"`
+}
+
+type SendRawTransactionReq struct {
+	RawTx string `json:"rawTx"`
+}
+
+type SendRawTransactionResp struct {
+	TxHash string `json:"txHash"`
 }

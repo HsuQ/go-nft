@@ -27,6 +27,19 @@ type (
 		Address string `json:"address"`
 		Balance string  `json:"balance"`
 	}
+	GetTransactionCountReq {
+		Address string `json:"address"`
+	}
+	GetTransactionCountResp {
+		Nonce string  `json:"nonce"`
+		Address string `json:"address"`
+	}
+	SendRawTransactionReq {
+		RawTx string `json:"rawTx"`
+	}
+	SendRawTransactionResp {
+		TxHash string `json:"txHash"`
+	}
 )
 
 @server (
@@ -41,4 +54,12 @@ service nft {
 	@doc "checkERC20rrived"
 	@handler checkERC20Arrived
 	post /erc20/check (CheckERC20ArrivedReq) returns (CheckERC20ArrivedResp)
+
+	@doc "getTransactionCount"
+	@handler getTransactionCount
+	post /nonce (GetTransactionCountReq) returns (GetTransactionCountResp)	
+
+	@doc "sendRawTransaction"
+	@handler sendRawTransaction
+	post /send (SendRawTransactionReq) returns (SendRawTransactionResp)
 }

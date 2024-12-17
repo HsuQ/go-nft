@@ -73,7 +73,7 @@ func (l *CheckERC20ArrivedLogic) CheckERC20Arrived(req *types.CheckERC20ArrivedR
 	// 解析返回值
 	var balance = new(big.Int)
 	balance.SetBytes(response)
-
+	logx.Infof("查询的金额为{%v}", req.Amount)
 	logx.Infof("账号{%v}余额为： %v", req.Address, balance)
 	// etherBalance := new(big.Int).Div(balance, big.NewInt(1e18))
 
