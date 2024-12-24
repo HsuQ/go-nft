@@ -40,11 +40,26 @@ func (l *GetPrivateTransactionCountLogic) GetPrivateTransactionCount(req *types.
 		return nil, err
 	}
 
-	logx.Infof("账号{%v} nonce为： %v", req.Address, nonce)
-	nonceStr := strconv.FormatUint(nonce, 10) // 转换为十进制字符串
+	gasPrice, err := l.svcCtx.PrivateEthClient.SuggestGasPrice(l.ctx)
+	if err != nil {
+		logx.Errorf("获取gas price失败： " + err.Error())
+		return nil, err
+	}
+
+	maxPriorityFeePerGas, err := l.svcCtx.PrivateEthClient.SuggestGasTipCap(l.ctx)
+	if err != nil {
+		logx.Errorf("获取maxPriorityFeePerGas失败： " + err.Error())
+		return nil, err
+	}
+
+	logx.Infof("账号{%v} nonce为： %v, gasPrice: %v wei, maxPriorityFeePerGas: %v wei",
+		req.Address, nonce, gasPrice, maxPriorityFeePerGas)
+
 	resp = &types.GetTransactionCountResp{
-		Nonce:   nonceStr,
-		Address: req.Address,
+		Nonce:                strconv.FormatUint(nonce, 10),
+		Address:              req.Address,
+		GasPrice:             gasPrice.String(),
+		MaxPriorityFeePerGas: maxPriorityFeePerGas.String(),
 	}
 
 	return resp, nil

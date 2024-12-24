@@ -43,8 +43,10 @@ type GetTransactionCountReq struct {
 }
 
 type GetTransactionCountResp struct {
-	Nonce   string `json:"nonce"`
-	Address string `json:"address"`
+	Nonce                string `json:"nonce"`
+	Address              string `json:"address"`
+	GasPrice             string `json:"gasPrice"`
+	MaxPriorityFeePerGas string `json:"maxPriorityFeePerGas"`
 }
 
 type NewAccountResp struct {
