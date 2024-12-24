@@ -7,4 +7,5 @@ type Config struct {
 	BitcoinConf     BitcoinConf       `json:"BitcoinConf"`
 	BlockcypherConf BlockcypherConfig `json:"Blockcypher"`
 	ETHConf         ethConfig         `json:"ETHConf"`
+	PrivateETHConf  ethConfig         `json:"PrivateETHConf"`
 }

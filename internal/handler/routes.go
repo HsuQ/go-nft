@@ -52,6 +52,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/private/nonce",
+				Handler: eth.GetPrivateTransactionCountHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/private/send",
+				Handler: eth.SendPrivateRawTransactionHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/recharge/check",
 				Handler: eth.CheckEthArrivedHandler(serverCtx),
 			},

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"errors"
+	"strings"
 
 	"nft/internal/svc"
 	"nft/internal/types"
@@ -32,9 +33,13 @@ func (l *SendRawTransactionLogic) SendRawTransaction(req *types.SendRawTransacti
 	if len(req.RawTx) == 0 {
 		return nil, errors.New("rawTx cannot be empty")
 	}
+	logx.Infof("rawTx: %v", req.RawTx)
+
+	// 去除可能存在的 "0x" 前缀
+	rawTx := strings.TrimPrefix(req.RawTx, "0x")
 
 	// 将 rawTx（十六进制字符串）解码为字节数组
-	rawTxBytes, err := hex.DecodeString(req.RawTx)
+	rawTxBytes, err := hex.DecodeString(rawTx)
 	if err != nil {
 		return nil, err
 	}

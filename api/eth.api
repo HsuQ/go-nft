@@ -62,4 +62,12 @@ service nft {
 	@doc "sendRawTransaction"
 	@handler sendRawTransaction
 	post /send (SendRawTransactionReq) returns (SendRawTransactionResp)
+
+	@doc "getPrivateTransactionCount"
+	@handler getPrivateTransactionCount
+	post /private/nonce (GetTransactionCountReq) returns (GetTransactionCountResp)	
+
+	@doc "sendPrivateRawTransaction"
+	@handler sendPrivateRawTransaction
+	post /private/send (SendRawTransactionReq) returns (SendRawTransactionResp)
 }

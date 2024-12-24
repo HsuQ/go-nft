@@ -8,9 +8,10 @@ import (
 )
 
 type ServiceContext struct {
-	Config        config.Config
-	BitcoinClient *rpcclient.Client
-	EthClient     *ethclient.Client
+	Config           config.Config
+	BitcoinClient    *rpcclient.Client
+	EthClient        *ethclient.Client
+	PrivateEthClient *ethclient.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -24,9 +25,15 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		// handle error
 		panic(err)
 	}
+	privateEthClient, err := NewPrivateEthClient(c)
+	if err != nil {
+		// handle error
+		panic(err)
+	}
 	return &ServiceContext{
-		Config:        c,
-		BitcoinClient: btcClient,
-		EthClient:     ethClient,
+		Config:           c,
+		BitcoinClient:    btcClient,
+		EthClient:        ethClient,
+		PrivateEthClient: privateEthClient,
 	}
 }

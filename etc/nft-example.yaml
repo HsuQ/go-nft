@@ -22,3 +22,7 @@ Blockcypher:
 ETHConf:
   Url: 
   ContractAddress:
+
+PrivateETHConf:
+  Url: 
+  ContractAddress: 

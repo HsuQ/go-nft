@@ -17,3 +17,12 @@ func NewEthClient(c config.Config) (*ethclient.Client, error) {
 	}
 	return client, nil
 }
+
+func NewPrivateEthClient(c config.Config) (*ethclient.Client, error) {
+	client, err := ethclient.Dial(c.PrivateETHConf.Url)
+	if err != nil {
+		logx.Errorf("ethclient.Dial error " + err.Error())
+		return nil, err
+	}
+	return client, nil
+}
