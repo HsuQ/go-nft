@@ -41,6 +41,7 @@ func (l *SendRawTransactionLogic) SendRawTransaction(req *types.SendRawTransacti
 	// 将 rawTx（十六进制字符串）解码为字节数组
 	rawTxBytes, err := hex.DecodeString(rawTx)
 	if err != nil {
+		logx.Errorf("rawTx解码失败： " + err.Error())
 		return nil, err
 	}
 
@@ -48,12 +49,14 @@ func (l *SendRawTransactionLogic) SendRawTransaction(req *types.SendRawTransacti
 	tx := &ethTypes.Transaction{}
 	err = rlp.DecodeBytes(rawTxBytes, tx)
 	if err != nil {
+		logx.Errorf("rawTx解码成Transaction 格式失败： " + err.Error())
 		return nil, err
 	}
 
 	// 调用 SendTransaction 发送交易
 	err = l.svcCtx.EthClient.SendTransaction(l.ctx, tx)
 	if err != nil {
+		logx.Errorf("SendTransaction接口失败： " + err.Error())
 		return nil, err
 	}
 
