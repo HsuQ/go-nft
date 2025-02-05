@@ -42,6 +42,14 @@ type (
 	SendRawTransactionResp {
 		TxHash string `json:"txHash"`
 	}
+	VerifySignatureReq {
+		Message string `json:"message"`
+		Signature string `json:"signature"`
+		Address string `json:"address"`
+	}
+	VerifySignatureResp {
+		Valid bool `json:"valid"`
+	}
 )
 
 @server (
@@ -72,4 +80,8 @@ service nft {
 	@doc "sendPrivateRawTransaction"
 	@handler sendPrivateRawTransaction
 	post /private/send (SendRawTransactionReq) returns (SendRawTransactionResp)
+
+	@doc "verifySignature"
+	@handler verifySignature
+	post /verify (VerifySignatureReq) returns (VerifySignatureResp)
 }

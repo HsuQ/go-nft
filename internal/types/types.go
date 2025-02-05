@@ -69,3 +69,13 @@ type SendRawTransactionReq struct {
 type SendRawTransactionResp struct {
 	TxHash string `json:"txHash"`
 }
+
+type VerifySignatureReq struct {
+	Message   string `json:"message"`
+	Signature string `json:"signature"`
+	Address   string `json:"address"`
+}
+
+type VerifySignatureResp struct {
+	Valid bool `json:"valid"`
+}

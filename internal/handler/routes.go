@@ -70,6 +70,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/send",
 				Handler: eth.SendRawTransactionHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/verify",
+				Handler: eth.VerifySignatureHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/eth/v1"),
 	)
