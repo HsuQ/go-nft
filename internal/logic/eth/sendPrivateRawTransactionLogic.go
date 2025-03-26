@@ -31,6 +31,7 @@ func NewSendPrivateRawTransactionLogic(ctx context.Context, svcCtx *svc.ServiceC
 func (l *SendPrivateRawTransactionLogic) SendPrivateRawTransaction(req *types.SendRawTransactionReq) (resp *types.SendRawTransactionResp, err error) {
 	// 检查 rawTx 是否为空
 	if len(req.RawTx) == 0 {
+		logx.Errorf("rawTx cannot be empty")
 		return nil, errors.New("rawTx cannot be empty")
 	}
 
@@ -40,6 +41,7 @@ func (l *SendPrivateRawTransactionLogic) SendPrivateRawTransaction(req *types.Se
 	// 将 rawTx（十六进制字符串）解码为字节数组
 	rawTxBytes, err := hex.DecodeString(rawTx)
 	if err != nil {
+		logx.Errorf("decode rawTx failed: %v", err)
 		return nil, err
 	}
 
@@ -47,12 +49,14 @@ func (l *SendPrivateRawTransactionLogic) SendPrivateRawTransaction(req *types.Se
 	tx := &ethTypes.Transaction{}
 	err = rlp.DecodeBytes(rawTxBytes, tx)
 	if err != nil {
+		logx.Errorf("decode rawTx to transaction failed: %v", err)
 		return nil, err
 	}
 
 	// 调用 SendTransaction 发送交易
 	err = l.svcCtx.PrivateEthClient.SendTransaction(l.ctx, tx)
 	if err != nil {
+		logx.Errorf("send transaction failed: %v", err)
 		return nil, err
 	}
 

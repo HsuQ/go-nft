@@ -17,8 +17,9 @@ type CheckArrivedResp struct {
 }
 
 type CheckERC20ArrivedReq struct {
-	Address string `json:"address"`
-	Amount  string `json:"amount"`
+	Address         string `json:"address"`
+	Amount          string `json:"amount"`
+	ContractAddress string `json:"contractAddress, optional"`
 }
 
 type CheckERC20ArrivedResp struct {
